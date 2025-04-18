@@ -99,3 +99,37 @@ export const checkAuth = async (req, res)=>{
         },
     })
 }
+
+export const getAllUsers = async (req, res)=>{
+    try{
+        const users = await User.find({}).select("-password -__v");
+        return res.status(200).json({
+            message: "Users fetched successfully",
+            users,
+        })
+    } catch(error){
+        console.log(error.message);
+        return res.status(500).json({message: "Internal server error"});
+    }
+} 
+
+export const getUser = async (req, res)=>{
+    const {id} = req.params;
+    if(!id){
+        return res.status(400).json({message: "Please provide user id"});
+    }
+
+    try{
+        const user = await User.findById(id).select("-password -__v");
+        if(!user){
+            return res.status(404).json({message: "User not found"});
+        }
+        return res.status(200).json({
+            message: "User fetched successfully",
+            user,
+        })
+    } catch(error){
+        console.log(error.message);
+        return res.status(500).json({message: "Internal server error"});
+    }
+}

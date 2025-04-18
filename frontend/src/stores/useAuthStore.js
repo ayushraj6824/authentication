@@ -8,6 +8,8 @@ export const useAuthStore = create((set, get)=>({
     loginLoading: false,
     signupLoading: false,
     checkAuthLoading: false,
+    getAllUsersLoading: false,
+    allUsers: [],
     user: null,
 
     checkAuth: async () => {
@@ -25,6 +27,37 @@ export const useAuthStore = create((set, get)=>({
             set({ checkAuthLoading: false });
         }
     },
+
+    getAllUsers: async () => {
+        set({ getAllUsersLoading: true });
+        try {
+            const response = await axiosInstance.get('/auth/users');
+            const users = response.data.users;
+            set({ allUsers: users });
+            return users;
+        } catch (error) {
+            console.error("Get all users error:", error);
+            set({ allUsers: [] });
+            return false;
+        } finally {
+            set({ getAllUsersLoading: false });
+        }
+    },
+
+    getUser: async(id) => {
+        set({ getUserLoading: true });
+        try {
+            const response = await axiosInstance.get(`/auth/users/${id}`);
+            const user = response.data.user;
+            return user;
+        } catch (error) {
+            console.error("Get user error:", error);
+            return false;
+        } finally {
+            set({ getUserLoading: false });
+        }
+    },
+
     login: async (data) => {
         console.log(data)
         set({ loginLoading: true });
@@ -63,4 +96,20 @@ export const useAuthStore = create((set, get)=>({
             set({ signupLoading: false });
         }
     },
+
+    logout : async () => {
+        set({ logoutLoading: true });
+        try {
+            await axiosInstance.post('/auth/logout');
+            set({ user: null });
+            toast.success("Logout successful");
+            return true;
+        } catch (error) {
+            console.error("Logout error:", error);
+            toast.error(error.response.data.message);
+            return false;
+        } finally {
+            set({ logoutLoading: false });
+        }
+    }
 }))
