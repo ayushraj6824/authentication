@@ -78,7 +78,7 @@ const HomePage = () => {
       <NavBar />
       <div className="mt-16">
         <h2 className="font-bold text-2xl capitalize">
-          Welcom {user.fullName}
+          Welcom {user.fullName.split(' ')[0]}
         </h2>
         <p className="text-sm text-muted-foreground">{user.email}</p>
       </div>

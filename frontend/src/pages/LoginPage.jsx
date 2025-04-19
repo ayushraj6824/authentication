@@ -55,7 +55,7 @@ const LoginPage = () => {
   
 
   return (
-    <div className="max-w-screen-lg min-h-svh flex items-center justify-center">
+    <div className="max-w-screen-md m-auto min-h-svh flex items-center justify-center">
       <Card>
         <CardContent className="pt-4">
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
